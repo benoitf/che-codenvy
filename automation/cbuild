@@ -1,0 +1,24 @@
+#!/bin/bash
+
+# Run this script with first parameter --install to install it into the system
+
+if [ "${1}" == '--install' ]; then
+    # install cbuild script to use it from anywhere in the system
+    # and enable autocompletion
+    # also can be used to apply updates of the autocompletion
+    sudo cp cbuild /usr/bin/
+    sudo cp cbuild_autocompletion /etc/bash_completion.d/
+    sudo sed -i "s/\"\PATH_TO_AUTOMATION_FOLDER\"/$(pwd | sed "s/\//\\\\\//g")/g" /usr/bin/cbuild /etc/bash_completion.d/cbuild_autocompletion
+    source /etc/bash_completion.d/cbuild_autocompletion
+else
+    # To use custom build script set variable PATH_TO_CUSTOM_CODENVY_BUILD_SCRIPT as path to your script
+    if [ ! -z "${PATH_TO_CUSTOM_CODENVY_BUILD_SCRIPT}" ]; then
+        cd "PATH_TO_AUTOMATION_FOLDER"
+        source "${PATH_TO_CUSTOM_CODENVY_BUILD_SCRIPT}"
+        run "$@"
+    else
+        cd "PATH_TO_AUTOMATION_FOLDER"
+        source buildLibrary.sh
+        run "$@"
+    fi
+fi
