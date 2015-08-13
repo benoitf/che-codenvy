@@ -25,6 +25,6 @@ RUN curl -fsSL http://archive.apache.org/dist/maven/maven-3/$MAVEN_VERSION/binar
 ENV MAVEN_HOME /usr/share/maven
 
 RUN cbuild -l che-parent che-core che-plugins che --nobuild --t -maven-additional-params '-Dfindbugs.skip=true'
-RUN cd $HOME/che-core && mvn dependency:copy-dependencies && mvn validate
-RUN cd $HOME/che-plugins && mvn dependency:copy-dependencies && mvn validate
+RUN cd $HOME/che-core && mvn install
+RUN cd $HOME/che-plugins && mvn install
 RUN cd $HOME/che && mvn dependency:copy-dependencies && mvn validate
